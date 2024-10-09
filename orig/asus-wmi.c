@@ -609,10 +609,8 @@ static int asus_wmi_input_init(struct asus_wmi *asus)
 	case asus_wmi_no_tablet_switch:
 		break;
 	case asus_wmi_kbd_dock_devid:
-		pr_info("asus_wmi_kbd_dock_devid: %x %x\n", asus->driver->quirks->tablet_switch_devid, asus->driver->quirks->tablet_switch_event_code);
-		/* asus->tablet_switch_inverted = true; */
-		asus->tablet_switch_inverted = !asus->driver->quirks->tablet_switch_not_inverted;
-		asus_wmi_tablet_sw_init(asus, asus->driver->quirks->tablet_switch_devid ? asus->driver->quirks->tablet_switch_devid : ASUS_WMI_DEVID_KBD_DOCK, asus->driver->quirks->tablet_switch_event_code ? asus->driver->quirks->tablet_switch_event_code : NOTIFY_KBD_DOCK_CHANGE);
+		asus->tablet_switch_inverted = true;
+		asus_wmi_tablet_sw_init(asus, ASUS_WMI_DEVID_KBD_DOCK, NOTIFY_KBD_DOCK_CHANGE);
 		break;
 	case asus_wmi_lid_flip_devid:
 		asus_wmi_tablet_sw_init(asus, ASUS_WMI_DEVID_LID_FLIP, NOTIFY_LID_FLIP);

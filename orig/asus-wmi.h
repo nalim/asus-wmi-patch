@@ -42,8 +42,6 @@ struct quirk_entry {
 	bool filter_i8042_e1_extended_codes;
 	bool ignore_key_wlan;
 	enum asus_wmi_tablet_switch_mode tablet_switch_mode;
-	int tablet_switch_devid, tablet_switch_event_code;
-	bool tablet_switch_not_inverted;
 	int wapf;
 	/*
 	 * For machines with AMD graphic chips, it will send out WMI event

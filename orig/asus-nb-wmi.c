@@ -146,11 +146,7 @@ static struct quirk_entry quirk_asus_ignore_fan = {
 };
 
 static struct quirk_entry quirk_asus_zenbook_duo_kbd = {
-	/* ignore_key_wlan = true, */
-	.tablet_switch_mode = asus_wmi_kbd_dock_devid,
-	.tablet_switch_devid = 0x00050051,
-	.tablet_switch_event_code = 0x5e,
-	.tablet_switch_not_inverted = true,
+	.ignore_key_wlan = true,
 };
 
 static int dmi_matched(const struct dmi_system_id *dmi)
