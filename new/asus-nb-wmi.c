@@ -151,6 +151,7 @@ static struct quirk_entry quirk_asus_zenbook_duo_kbd = {
 	.tablet_switch_devid = 0x00050051,
 	.tablet_switch_event_code = 0x5e,
 	.tablet_switch_not_inverted = true,
+	.ignore_screenpad = true,
 };
 
 static int dmi_matched(const struct dmi_system_id *dmi)

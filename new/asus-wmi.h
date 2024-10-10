@@ -44,6 +44,7 @@ struct quirk_entry {
 	enum asus_wmi_tablet_switch_mode tablet_switch_mode;
 	int tablet_switch_devid, tablet_switch_event_code;
 	bool tablet_switch_not_inverted;
+	bool ignore_screenpad;
 	int wapf;
 	/*
 	 * For machines with AMD graphic chips, it will send out WMI event

@@ -1,7 +1,7 @@
 diff -up orig/asus-nb-wmi.c new/asus-nb-wmi.c
---- orig/asus-nb-wmi.c	2024-10-08 10:18:04.000000000 +0200
-+++ new/asus-nb-wmi.c	2024-10-08 10:15:52.141120621 +0200
-@@ -146,7 +146,11 @@ static struct quirk_entry quirk_asus_ign
+--- orig/asus-nb-wmi.c	2024-10-10 09:17:05.947878543 +0200
++++ new/asus-nb-wmi.c	2024-10-10 09:16:46.598722430 +0200
+@@ -146,7 +146,12 @@ static struct quirk_entry quirk_asus_ign
  };
  
  static struct quirk_entry quirk_asus_zenbook_duo_kbd = {
@@ -11,12 +11,13 @@ diff -up orig/asus-nb-wmi.c new/asus-nb-wmi.c
 +	.tablet_switch_devid = 0x00050051,
 +	.tablet_switch_event_code = 0x5e,
 +	.tablet_switch_not_inverted = true,
++	.ignore_screenpad = true,
  };
  
  static int dmi_matched(const struct dmi_system_id *dmi)
 diff -up orig/asus-wmi.c new/asus-wmi.c
---- orig/asus-wmi.c	2024-10-08 10:18:04.000000000 +0200
-+++ new/asus-wmi.c	2024-10-08 10:10:56.471851626 +0200
+--- orig/asus-wmi.c	2024-10-10 09:17:05.947878543 +0200
++++ new/asus-wmi.c	2024-10-10 09:16:46.599722438 +0200
 @@ -609,8 +609,10 @@ static int asus_wmi_input_init(struct as
  	case asus_wmi_no_tablet_switch:
  		break;
@@ -30,15 +31,25 @@ diff -up orig/asus-wmi.c new/asus-wmi.c
  		break;
  	case asus_wmi_lid_flip_devid:
  		asus_wmi_tablet_sw_init(asus, ASUS_WMI_DEVID_LID_FLIP, NOTIFY_LID_FLIP);
+@@ -4740,7 +4742,7 @@ static int asus_wmi_add(struct platform_
+ 	} else if (asus->driver->quirks->wmi_backlight_set_devstate)
+ 		err = asus_wmi_set_devstate(ASUS_WMI_DEVID_BACKLIGHT, 2, NULL);
+ 
+-	if (asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_SCREENPAD_LIGHT)) {
++	if (!asus->driver->quirks->ignore_screenpad && asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_SCREENPAD_LIGHT)) {
+ 		err = asus_screenpad_init(asus);
+ 		if (err && err != -ENODEV)
+ 			goto fail_screenpad;
 diff -up orig/asus-wmi.h new/asus-wmi.h
---- orig/asus-wmi.h	2024-10-08 10:18:04.000000000 +0200
-+++ new/asus-wmi.h	2024-10-08 10:10:06.854522495 +0200
-@@ -42,6 +42,8 @@ struct quirk_entry {
+--- orig/asus-wmi.h	2024-10-10 09:17:05.947878543 +0200
++++ new/asus-wmi.h	2024-10-10 09:16:46.599722438 +0200
+@@ -42,6 +42,9 @@ struct quirk_entry {
  	bool filter_i8042_e1_extended_codes;
  	bool ignore_key_wlan;
  	enum asus_wmi_tablet_switch_mode tablet_switch_mode;
 +	int tablet_switch_devid, tablet_switch_event_code;
 +	bool tablet_switch_not_inverted;
++	bool ignore_screenpad;
  	int wapf;
  	/*
  	 * For machines with AMD graphic chips, it will send out WMI event
