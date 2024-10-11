@@ -1,5 +1,5 @@
 # asus-wmi-patch
-This repository contains a simple partch generator for asus WMI module.
+This repository contains a simple patch generator for asus WMI module.
 
 To install and use patched module using dkms:
 
