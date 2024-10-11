@@ -1,7 +1,7 @@
-# asus-wmi-screenpad
-This repository contains a version of the asus-wmi module with support for brightness control on secondary screens ("ScreenPad Plus") on ASUS Zenbook Duo notebooks. It also adds a few keys from the Zenbook Duo keyboard (Camera, /A, screen switch, toggle ScreenPad) so they can be mapped in your desktop environment.
+# asus-wmi-patch
+This repository contains a simple partch generator for asus WMI module.
 
-To install and use this module using dkms:
+To install and use patched module using dkms:
 
 0. Please make sure that you are running the kernel that you want to install the module for. So if you did a kernel update, please reboot first so the installation uses the correct kernel version.
 
@@ -14,10 +14,10 @@ To install and use this module using dkms:
    ```
    sudo mkdir /usr/src/asus-wmi-1.0
    cd /usr/src/asus-wmi-1.0
-   sudo wget 'https://github.com/Plippo/asus-wmi-screenpad/archive/master.zip'
+   sudo wget 'https://github.com/nalim/asus-wmi-patch/archive/master.zip'
    sudo unzip master.zip
-   sudo mv asus-wmi-screenpad-master/* .
-   sudo rmdir asus-wmi-screenpad-master
+   sudo mv asus-wmi-patch-master/* .
+   sudo rmdir asus-wmi-patch-master
    sudo rm master.zip
    ```
    Now the source code should be in `/usr/src/asus-wmi-1.0`. It's important that the folder is called exactly like that because DKMS expects that.
@@ -39,41 +39,6 @@ To install and use this module using dkms:
    sudo dkms install -m asus-wmi -v 1.0
    ```
    From now on, DKMS will automatically rebuild the module on every kernel update.
-
-6. After rebooting, you should now find a new device in `/sys/class/leds/asus::screenpad`.
-   To set the brightness of the screen, simply call
-   ```
-   echo XXX | sudo tee '/sys/class/leds/asus::screenpad/brightness'
-   ```
-   where XXX is a value between 0 and 255 (0 turns the screen completely off, 255 sets it to maximum brightness.  
-   To allow every user to set the brightness without using sudo, call
-   ```
-   sudo chmod a+w '/sys/class/leds/asus::screenpad/brightness'
-   ```
-   Now you can set the brightness by simply executing
-   ```
-   echo XXX > '/sys/class/leds/asus::screenpad/brightness'
-   ```
-
-   `chmod` has to be executed again after every reboot, so it is advisable to add the call to a boot script, e.g. `/etc/rc.local`.  
-   or create a udev rule to set the permissions:  
-   `sudo nano /etc/udev/rules.d/99-asus.rules`
-   ```
-    # rules for asus_nb_wmi devices
-
-    # make screenpad backlight brightness write-able by everyone
-    ACTION=="add", SUBSYSTEM=="leds", KERNEL=="asus::screenpad", RUN+="/bin/chmod a+w /sys/class/leds/%k/brightness"
-   ```
-   <!--
-   # make lightbar write-able by everyone
-   ACTION=="add", SUBSYSTEM=="leds", KERNEL=="asus::lightbar", RUN+="/bin/chmod a+w /sys/class/leds/%k/brightness"
-    -->
-
-
-7. You can now also use the functionality of your Desktop Environment to map the function keys on the keyboard to actions of your choice.
-   For example, you can create a script that toggles the state of the screenpad and map it to the "Toggle ScreenPad" key.
-
-
 
 ## Troubleshooting
 
@@ -102,7 +67,7 @@ sudo depmod -a
 ```
 
 on newer Ubuntu versions it can happen that the `mfd_aaeon` kernel module is interfering.
-it is only needed for asus embedded boards - more details in [#issues/32](https://github.com/Plippo/asus-wmi-screenpad/issues/32#issuecomment-986424835)
+it is only needed for asus embedded boards - more details in [#issues/32](https://github.com/nalim/asus-wmi-patch/issues/32#issuecomment-986424835)
 so we can safely blacklist:
 ```bash
 echo "blacklist mfd_aaeon" | sudo tee /etc/modprobe.d/aaeon-blacklist.conf
