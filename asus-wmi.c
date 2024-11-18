@@ -2437,7 +2437,7 @@ static ssize_t tablet_show(struct device *dev, struct device_attribute *attr,
 	struct asus_wmi *asus = dev_get_drvdata(dev);
 	bool value = false;
                 
-    if (asus->tablet_switch_dev_id) {
+	if (asus->tablet_switch_dev_id) {
 		int result = asus_wmi_get_devstate_simple(asus, asus->tablet_switch_dev_id);
 		if (result < 0)
 			return result;
